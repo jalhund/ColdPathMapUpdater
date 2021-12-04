@@ -1,0 +1,25 @@
+local function get_num_of_provinces(path)
+    local file = io.open(path .. "exported_map/map_info.json")
+    if not file then
+        print("error loading json file:")
+        return
+    end
+    local json_data = file:read("*a")
+    file:close()
+
+    local s = [["num_of_provinces":(%d+),]]
+
+    local n = string.match(json_data, s)
+    print("num_of_provinces is", n)
+    return tonumber(n)
+end
+
+function init(self)
+    print("test")
+    local path = ""
+    local n = get_num_of_provinces(path)
+    for i = 1, n do
+        lzs.compress(path .. "exported_map/blurred_data/" .. i)
+        lzs.compress(path .. "exported_map/generated_data/" .. i)
+    end
+end
